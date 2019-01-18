@@ -57,6 +57,24 @@ gzfile("test.dat.gz", open = "rb") # binary mode
 gzfile("test.dat.gz", open = "wb") # binary mode
 ```
 
+To find the missing files between two folders
+
+```{r full_exercise}
+fn <- "http://www.molpopgen.org/EE283Winter2019/lab2data.tar.gz"
+download.file(fn,destfile="tmp.tar.gz")
+untar("tmp.tar.gz",list=TRUE)  ## check contents
+untar("tmp.tar.gz")
+setwd("C:/Users/neela/Desktop/lab2data")
+list_data <- list.files(path = "C:/Users/neela/Desktop/lab2data",pattern='datafile.*\\.txt', recursive = T)
+datatemp <- gsub("data/datafile.", "", list_data)
+datatemp <- tools::file_path_sans_ext(datatemp)
+list_output <- list.files(path = "C:/Users/neela/Desktop/lab2data",pattern='outfile.*\\.out', recursive = T)
+outtemp <- gsub("output/outfile.", "", list_output)
+outtemp <- tools::file_path_sans_ext(outtemp)
+datatemp[!datatemp%in%outtemp]
+```
+
+
 ## Python
 
 1. How do you ask if a file exists?
