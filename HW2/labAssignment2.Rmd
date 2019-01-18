@@ -71,7 +71,7 @@ datatemp <- tools::file_path_sans_ext(datatemp)
 list_output <- list.files(path = "C:/Users/neela/Desktop/lab2data",pattern='outfile.*\\.out', recursive = T)
 outtemp <- gsub("output/outfile.", "", list_output)
 outtemp <- tools::file_path_sans_ext(outtemp)
-datatemp[!datatemp%in%outtemp]
+required_list <- datatemp[!datatemp%in%outtemp]
 ```
 
 
@@ -139,3 +139,48 @@ content = "Lots of content here"
 with gzip.open('file.txt.gz', 'wb') as f:
     f.write(content)
 ```
+
+To find the missing files between two folders
+
+```{python full_exercise}
+import urllib.request
+import gzip
+import glob
+import os
+import tarfile
+
+
+dir =  "C:/Users/neela/Desktop/"
+os.chdir(dir)
+
+baseURL = "http://www.molpopgen.org/EE283Winter2019/"
+filename = "lab2data.tar.gz"
+outFilePath = filename[:-3]
+
+response = urllib.request.urlopen(baseURL + filename)
+with open(outFilePath, 'wb') as outfile:
+    outfile.write(gzip.decompress(response.read()))
+
+tar = tarfile.open(outFilePath) 
+tar.extractall(path=dir) 
+tar.close()
+os.chdir(dir+outFilePath[:-4]) 
+
+list_data = []
+for filename in glob.iglob('*/*.txt', recursive=True): 
+    list_data.append(filename)
+
+datatemp = [s.replace("data\\datafile.", "") for s in list_data]
+datatemp = [s.replace(".txt", "") for s in datatemp]
+
+list_output = []
+for filename in glob.iglob('*/*.out', recursive=True): 
+    list_output.append(filename)
+
+outtemp = [s.replace("output\\outfile.", "") for s in list_output]
+outtemp = [s.replace(".out", "") for s in outtemp]
+
+
+required_list = [x for x in datatemp if x not in outtemp]
+```
+
