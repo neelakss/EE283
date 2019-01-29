@@ -1,6 +1,10 @@
 ---
 title: "Plotting_changes"
+author: "Neelakshi Soni"
+date: "January 16, 2019"
 output: html_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
