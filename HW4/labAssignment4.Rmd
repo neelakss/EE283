@@ -36,7 +36,7 @@ library(ggpubr)
 ggarrange(plot.diamonds,ggarrange(plot.diamonds, plot.diamonds, ncol = 2, labels = c("B", "C")), nrow = 2,labels = "A")
 ```
 
-### egg as the key function/package
+### egg using gtable_frame as the key function/package
 
 ```{r egg}
 library(egg)
