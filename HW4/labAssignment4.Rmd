@@ -1,0 +1,161 @@
+---
+title: "LabHw4"
+author: "Neelakshi Soni"
+date: "February 4, 2019"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### tiff
+
+```{r tiff}
+library(ggplot2)
+library(grid)
+plot.diamonds <- ggplot(diamonds, aes(clarity, fill = cut)) + geom_bar() +
+  theme(axis.text.x = element_text(angle=70, vjust=0.5))
+plot.diamonds
+ggsave("diamonds.tif",device="tiff", dpi = 600)
+```
+
+### ggpubr to use ggarrange as key function/package
+
+```{r ggpubr}
+library(ggpubr)
+ggarrange(plot.diamonds,ggarrange(plot.diamonds, plot.diamonds, nrow = 2, labels = c("B", "C")), ncol = 2,labels = "A")
+```
+
+### to flip the col/row layout
+
+```{r ggpubr}
+library(ggpubr)
+ggarrange(plot.diamonds,ggarrange(plot.diamonds, plot.diamonds, ncol = 2, labels = c("B", "C")), nrow = 2,labels = "A")
+```
+
+### egg as the key function/package
+
+```{r egg}
+library(egg)
+g1 <- ggplotGrob(plot.diamonds)
+fg1 <- gtable_frame(g1, debug = T)
+fg12 <- gtable_frame(gtable_rbind(fg1,fg1),
+                     width = unit(1,"null"),
+                     height = unit(2,"null"))
+fg3 <- gtable_frame(g1, width = unit(1,"null"), height = unit(1,"null"), debug = T) 
+grid.newpage()
+combined <- gtable_cbind(fg3,fg12)
+grid.draw(combined)
+grid.remove(axis, grep = T, global = T)
+```
+
+The only thing I find weird about the packages is the huge overlap between the them.
+
+### littler
+
+```{r littler}
+library(tidyverse)
+readr::write_delim(diamonds,"diamonds.txt")
+```
+
+### R script
+
+```{r scripting}
+#!/usr/bin/Rscript
+library(methods)
+require(optparse)
+require(ggplot2)
+
+
+option_list = list(
+              make_option(c("--infile"), default = NULL,action = "store_true",
+              help = "dataset file name",dest = "infile", type = "character"),
+          make_option(c("--xaxis"), default = "clarity",action = "store_true",
+              help = "dataset x axis",dest = "xaxis", type = "character"),
+          make_option(c("--filler"), default = "cut",action = "store_true",
+              help = "dataset filler values",dest = "filler", type = "character"),
+          make_option(c("--outfile"), default = NULL,action = "store_true",
+              help = "dataset outfile name",dest = "outfile", type = "character")
+);
+
+opt_parser = OptionParser(option_list=option_list);
+opt = parse_args(opt_parser);
+
+
+data <- read.table(opt$infile, header=TRUE)
+newdata <- data.frame(x=data[,opt$xaxis],y = data[,opt$filler])
+p <- ggplot(newdata, aes(x=x, fill=y))+ geom_bar()+
+    theme(axis.text.x=element_text(angle=70,vjust=0.5))
+
+ggsave(paste0(opt$outfile,".png"),device="png",dpi=600)
+```
+
+```{bash command_line}
+Rscript ./littler_script1.R --infile diamonds.txt --outfile diamonds --xaxis clarity --filler cut 
+chmod +x ./littler_script1.R
+./littler_script1.R --infile diamonds.txt --outfile diamonds --xaxis clarity --filler cut
+```
+
+### reticulate
+
+```{r reticulate}
+library(reticulate)
+use_python("/usr/bin/python3")
+pd <- import("pandas", convert=F)
+x = data.frame(x=rnorm(100),y=rnorm(100))
+y = pd$DataFrame(r_to_py(x))
+z = py_to_r(y$describe())
+print(z)
+```
+
+### getting rid of convert=F and py_to_r
+
+```{r reticulate}
+pd <- import("pandas")
+x = data.frame(x=rnorm(100),y=rnorm(100))
+y = pd$DataFrame(x)
+z = (y$describe())
+print(z)
+```
+
+It doesn't seem to work and I believe its to do with the object conversions. When a python API requires a list and instead a single element R vector is passed, it would get converted to python scalar.
+
+### excuting python in R
+
+
+```{r python_execute}
+library(reticulate)
+use_python("/usr/bin/python3")
+repl_python()
+```
+
+```{python repl_python}
+import pandas as pd
+x = pd.read_csv("data2.txt",sep=" ")
+exit
+```
+
+```{r accesing_data}
+py$x
+```
+
+### external python script
+
+```{python script}
+import pandas as pd
+file = pd.read_csv("data2.txt", sep= " ")
+```
+
+```{r run_external_python}
+py_run_file("get_df.py")
+x <- py$file
+```
+
+### gridspec
+
+```{python plot}
+
+```
