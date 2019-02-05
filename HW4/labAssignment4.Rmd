@@ -153,9 +153,3 @@ file = pd.read_csv("data2.txt", sep= " ")
 py_run_file("get_df.py")
 x <- py$file
 ```
-
-### gridspec
-
-```{python plot}
-
-```
