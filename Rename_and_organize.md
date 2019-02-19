@@ -2,6 +2,7 @@
 Before making any changes to the actual file names, I just copied the files to a new directory as follows:
 <pre><code>cp .../Bioinformatics_Course/ATACseq/* .../Bioinformatics_Course/renameATACseq
 cp .../Bioinformatics_Course/DNAseq/* .../Bioinformatics_Course/renameDNAseq
+cp **/**/*.gz ../../renamedRNAseq/
 </code></pre>
 ## ATACseq
 
