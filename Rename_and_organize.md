@@ -15,3 +15,24 @@ done
 </code></pre>
 
 ## DNAseq
+
+<pre><code>for i in ADL06*; 
+do     
+    mv "$i" "A4_${i}"
+done
+</code></pre>
+<pre><code>for i in ADL09*; 
+do     
+    mv "$i" "A5_${i}"
+done
+</code></pre>
+<pre><code>for i in ADL10*; 
+do     
+    mv "$i" "A6_${i}"
+done
+</code></pre>
+<pre><code>for i in ADL14*; 
+do     
+    mv "$i" "A7_${i}"
+done
+</code></pre>
