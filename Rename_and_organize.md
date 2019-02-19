@@ -39,3 +39,5 @@ do
     mv "$i" "A7_${i}"
 done
 </code></pre>
+
+## RNAseq
