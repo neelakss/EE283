@@ -12,7 +12,7 @@ do
 done
 </code></pre>
 
-<pre><code> for i in  $(ls *.fq.gz); 
+<pre><code> for i in  $(ls *.gz); 
 do 
     mv ${i} $(grep $(echo "$i" | awk -F'[__]' '{print $4}') README.ATACseq.txt | awk '{print $2"_"$3"_"$4}')_$i 
 done 
@@ -42,3 +42,8 @@ done
 </code></pre>
 
 ## RNAseq
+<pre><code>for i in  $(ls *.gz);  
+do      
+    mv ${i} $(grep $(echo "$i" | awk -F'[__]' '{print $1}') RNAseq384_SampleCoding.txt | awk '{print $12"_"$8}')_$i
+done
+</code></pre>
