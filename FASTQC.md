@@ -76,6 +76,6 @@ for illumina reads:
 #$ -t 1-12
 
 module load fastqc/0.11.2
-prefix=`head - n $SGE_TASK_ID RNASeq.prefixes.txt | tail -n 1`
+prefix=`head - n $SGE_TASK_ID DNASeq.prefixes.txt | tail -n 1`
 fastqc --noextract -o ./ ../renamedDNAseq/${prefix}_1.fq.gz ../renamedDNAseq/${prefix}_2.fq.gz
 </code></pre>
