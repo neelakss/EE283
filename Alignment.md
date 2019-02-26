@@ -85,7 +85,7 @@ prefix=`head -n $SGE_TASK_ID RNAseq.prefixes.txt | tail -n 1`
 
 multimapping=4
 
-bowtie2 -k ${multimapping} -X2000 --mm --threads 8 -x ../ref/dmel-all-chromosome-r6.13.fasta.out -1 ${prefix}1_001.fastq.gz -2 ${prefix}2_001.fastq.gz 2> $log | samtools view -bS - > ./alignRNA/${prefix}.bowtie.bam
+bowtie2 -k ${multimapping} -X2000 --mm --threads 8 -x ../ref/dmel-all-chromosome-r6.13.fasta.out -1 ${prefix}1_001.fastq.gz -2 ${prefix}2_001.fastq.gz 2>$log | samtools view -bS - > ./alignRNA/${prefix}.bowtie.bam
 
 samtools sort ./alignRNA/${prefix}.bowtie.bam -o ./alignRNA/${prefix}.bowtie.sort.bam
 
