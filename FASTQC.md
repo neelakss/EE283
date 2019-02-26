@@ -32,7 +32,7 @@ fastqc --noextract -o ./ ../renamedATACseq/${prefix}1.fq.gz ../renamedATACseq/${
 
 <pre><code>module load BBMap
 testformat.sh in=100_CGTTCTT_L003_R1_001.fastq.gz
-ls *1_001.fastq.gz | sed 's/1.fastq.gz//' > RNAseq.prefixes.txt
+ls *1_001.fastq.gz | sed 's/1_001.fastq.gz//' > RNAseq.prefixes.txt
 cd ../fastqc_before
 mv ../renamedRNAseq/RNAseq.prefixes.txt ./
 </code></pre>
