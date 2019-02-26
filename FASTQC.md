@@ -62,10 +62,12 @@ cd ../fastqc_before
 mv ../renamedDNAseq/DNAseq.prefixes.txt ./
 </code></pre>
 
-> As the format is Illumina we can directly do the fastqc and the script is as follows 
+> As the format is Illumina we have to converted the format to do the fastqc and the script is as follows 
 {(wc -l DNAseq.prefixes.txt) will give you how many parallel jobs you need to run}, We can use bwa -I parameter
 for illumina reads:
-
+ 
+<pre><code>./seqtk/seqtk seq -Q64 -V  A4_ADL06_1_1.fq.gz | gzip -c > A4_ADL06_1_converted_1.fq.gz #do for all reads
+</code></pre>
 <pre><code>#!/bin/bash
 #$ -N fastqc_all_DNA
 #$ -q epyc,bio
