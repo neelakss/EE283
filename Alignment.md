@@ -62,8 +62,7 @@ samtools index ./alignATAC/${prefix}.RG.bam
 </code></pre>
 
 ## RNAseq
-<pre><code>
-#!/bin/bash
+<pre><code>#!/bin/bash
 #$ -N align_RNA
 #$ -q epyc,bio
 #$ -pe openmp 8
@@ -80,13 +79,18 @@ module load java/1.7
 module load tophat/2.1.0
 module load bowtie2/2.2.7
 
+giff="../ref/dmel-all-r6.13.gtf"
+ref="../ref/dmel-all-chromosome-r6.13.fasta.out"
+
 prefix=`head -n $SGE_TASK_ID RNAseq.prefixes.txt | tail -n 1`
 
-tophat -p 8 -G ../ref/dmel-all-r6.13.gtf -o ./alignRNA ../ref/dmel-all-chromosome-r6.13.fasta.out ${prefix}1_001.fastq.gz ${prefix}2_001.fastq.gz
+mkdir ${prefix}_alignRNA
 
-samtools sort ./alignRNA/${prefix}_accepted_hits.bam -o ./alignRNA/${prefix}_accepted_hits.sort.bam
+tophat -p 8 -G ${giff} -o ./${prefix}_alignRNA ${ref} ${prefix}1_001.fastq.gz ${prefix}2_001.fastq.gz
 
-samtools index ./alignRNA/${prefix}_accepted_hits.sort.bam
+samtools sort ./${prefix}_alignRNA/accepted_hits.bam -o ./${prefix}_alignRNA/${prefix}_accepted_hits.sort.bam
+
+samtools index ./${prefix}_alignRNA/${prefix}_accepted_hits.sort.bam
 </code></pre>
 
 ## DNAseq
