@@ -63,7 +63,7 @@ mv ../renamedDNAseq/DNAseq.prefixes.txt ./
 </code></pre>
 
 > As the format is Illumina we can directly do the fastqc and the script is as follows 
-{(wc -l DNAseq.prefixes.txt) will give you how many parallel jobs you need to run}, We can use bwa -l parameter
+{(wc -l DNAseq.prefixes.txt) will give you how many parallel jobs you need to run}, We can use bwa -I parameter
 for illumina reads:
 
 <pre><code>#!/bin/bash
