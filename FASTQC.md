@@ -33,8 +33,7 @@ fastqc --noextract -o ./ ../renamedATACseq/${prefix}1.fq.gz ../renamedATACseq/${
 <pre><code>module load BBMap
 testformat.sh in=100_CGTTCTT_L003_R1_001.fastq.gz
 ls *1_001.fastq.gz | sed 's/1.fastq.gz//' > RNAseq.prefixes.txt
-cd ..
-cd ./fastqc_before
+cd ../fastqc_before
 mv ../renamedRNAseq/RNAseq.prefixes.txt ./
 </code></pre>
 
@@ -51,4 +50,30 @@ mv ../renamedRNAseq/RNAseq.prefixes.txt ./
 module load fastqc/0.11.2
 prefix=`head - n $SGE_TASK_ID RNASeq.prefixes.txt | tail -n 1`
 fastqc --noextract -o ./ ../renamedRNAseq/${prefix}1_001.fastq.gz ../renamedRNAseq/${prefix}2_001.fastq.gz
+</code></pre>
+
+## DNAseq
+> Check if the format of the file and change it to mordern format if the format is old.
+
+<pre><code>module load BBMap
+testformat.sh in=A4_ADL06_1_1.fq.gz
+ls *_1.fq.gz | sed 's/_1.fq.gz//' > DNAseq.prefixes.txt
+cd ../fastqc_before
+mv ../renamedDNAseq/DNAseq.prefixes.txt ./
+</code></pre>
+
+> As the format is Illumina we can directly do the fastqc and the script is as follows 
+{(wc -l DNAseq.prefixes.txt) will give you how many parallel jobs you need to run}, We can use bwa -l parameter
+for illumina reads:
+
+<pre><code>#!/bin/bash
+#$ -N fastqc_all_DNA
+#$ -q epyc,bio
+#$ -pe openmp 8
+#$ -R y
+#$ -t 1-12
+
+module load fastqc/0.11.2
+prefix=`head - n $SGE_TASK_ID RNASeq.prefixes.txt | tail -n 1`
+fastqc --noextract -o ./ ../renamedDNAseq/${prefix}_1.fq.gz ../renamedDNAseq/${prefix}_2.fq.gz
 </code></pre>
