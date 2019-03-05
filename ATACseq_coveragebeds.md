@@ -23,5 +23,5 @@ Scale=`echo "1.0/($Nreads/1000000)" | bc -l`
 
 samtools view -b ./alignATAC/${prefix}.RG.bam | genomeCoverageBed -ibam -g ${ref} -bg -scale ${Scale} > ./alignATAC/${prefix}.coverage
 
-bedGraphToBigWig ./alignATAC/${prefix}.coverage ${ref}.fai ./alignATAC/${prefix}.bw
+bedGraphToBigWig ./alignATAC/${prefix}.coverage ../ref/${ref}.fai ./alignATAC/${prefix}.bw
 </code></pre>
