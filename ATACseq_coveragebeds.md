@@ -14,14 +14,14 @@ module load picard-tools/1.87
 module load java/1.7
 module load tophat/2.1.0
 module load bowtie2/2.2.7
-module load ucsc-tools
+module load ucsc-tools/jan-19-2016
 
 ref="../ref/dmel-all-chromosome-r6.13.fasta"
 prefix=`head -n $SGE_TASK_ID ATACseq.prefixes.txt | tail -n 1`
 Nreads=`samtools view -c -F 4 ./alignATAC/${prefix}.RG.bam`
 Scale=`echo "1.0/($Nreads/1000000)" | bc -l`
 
-samtools view -b ./alignATAC/${prefix}.RG.bam | genomeCoverageBed -ibam -g ${ref} -bg -scale ${Scale} > ./alignATAC/${prefix}.coverage
+samtools view -b ./alignATAC/${prefix}.RG.bam | genomeCoverageBed -ibam - -bg -scale ${Scale} > ./alignATAC/${prefix}.coverage
 
-bedGraphToBigWig ./alignATAC/${prefix}.coverage ../ref/${ref}.fai ./alignATAC/${prefix}.bw
+bedGraphToBigWig ./alignATAC/${prefix}.coverage ./alignATAC/${prefix}.bw
 </code></pre>
