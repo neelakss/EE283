@@ -14,7 +14,7 @@ module load picard-tools/1.87
 module load java/1.7
 module load tophat/2.1.0
 module load bowtie2/2.2.7
-module load jje/ken/2014.02.19
+module load ucsc-tools
 
 ref="../ref/dmel-all-chromosome-r6.13.fasta"
 prefix=`head -n $SGE_TASK_ID ATACseq.prefixes.txt | tail -n 1`
