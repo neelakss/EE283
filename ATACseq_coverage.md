@@ -1,4 +1,4 @@
-#!/bin/bash
+<pre><code>#!/bin/bash
 #$ -N coveragebeds_all
 #$ -q epyc,bio
 #$ -pe openmp 8
@@ -24,3 +24,4 @@ Scale=`echo "1.0/($Nreads/1000000)" | bc -l`
 samtools view -b ./alignATAC/${prefix}.RG.bam | genomeCoverageBed -ibam -g ${ref} -bg -scale ${Scale} > ./alignATAC/${prefix}.coverage
 
 bedGraphToBigWig ./alignATAC/${prefix}.coverage ${ref}.fai ./alignATAC/${prefix}.bw
+</code></pre>
