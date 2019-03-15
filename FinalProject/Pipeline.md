@@ -12,7 +12,7 @@
 
 module load fastqc
 
-prefix=`head -n $SGE_TASK_ID fastq.prefixes.txt | tail -n 1` # {ls *.fq.gz | sed 's/1.fq.gz//' > fastq.prefixes.txt}
+prefix=`head -n $SGE_TASK_ID fastq.prefixes.txt | tail -n 1` # {ls *1.fq.gz | sed 's/_R1.fq.gz//' > fastq.prefixes.txt}
 
 fastqc -t 64 -o ./fastqc_bef --noextract ${prefix}_R1.fastq ${prefix}_R2.fastq
 </code></pre>
