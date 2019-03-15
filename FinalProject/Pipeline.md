@@ -82,7 +82,7 @@ module load STAR/2.5.2a
 STAR --runMode genomeGenerate --genomeDir ../star_genome/indices/genome --genomeFastaFiles ../star_genome/genome.fa --runThreadN 8 --sjdbOverhang 99 --sjdbGTFfile ../star_genome/genome.gff3 
 </code></pre>
 
-### STEP 5b : STAR Alignment (ALignment)
+### STEP 5b : STAR Alignment (Alignment)
 <pre><code>#!/bin/bash
 #$ -N star_jobs
 #$ -q epyc,bio
