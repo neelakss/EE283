@@ -177,15 +177,11 @@ fastqc -t 8 -o ./fastqc_aft --noextract ${prefix}-sortmerna-trimmomatic_1.fq ${p
 module load hisat2/2.1.0
 module load python/2.7.15
 
-hisat2_extract_splice_sites.py -v ./referenceData/annotations/Mus_musculus.GRCm38.80.gtf ./referenceData/hisat2_index/splice_sites.txt
+hisat2_extract_splice_sites.py -v ./referenceData/annotations/Mus_musculus.GRCm38.80.gtf > ./referenceData/hisat2_index/splice_sites.txt
 
-hisat2_extract_exons.py -v ./referenceData/annotations/Mus_musculus.GRCm38.80.gtf \
-    > referenceData/hisat2_index/exons.txt
+hisat2_extract_exons.py -v ./referenceData/annotations/Mus_musculus.GRCm38.80.gtf > ./referenceData/hisat2_index/exons.txt
 
-hisat2-build referenceData/fasta/Mus_musculus.GRCm38.dna_sm.primary_assembly.fa \
-    --ss referenceData/hisat2_index/splice_sites.txt \
-    --exon referenceData/hisat2_index/exons.txt \
-    referenceData/hisat2_index/GRCm38.hisat2
+hisat2-build ./referenceData/fasta/Mus_musculus.GRCm38.dna_sm.primary_assembly.fa --ss ./referenceData/hisat2_index/splice_sites.txt --exon ./referenceData/hisat2_index/exons.txt ./referenceData/hisat2_index/GRCm38.hisat2
 </code></pre>
 
 ### STEP 5b : STAR Alignment (Alignment)
