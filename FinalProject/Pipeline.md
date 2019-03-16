@@ -8,7 +8,7 @@
 #$ -q epyc,bio
 #$ -pe openmp 8
 #$ -R y
-#$ -t 1-24
+#$ -t 1-12
 
 module load fastqc
 
@@ -24,7 +24,7 @@ fastqc -t 64 -o ./fastqc_bef --noextract ${prefix}_R1.fastq ${prefix}_R2.fastq #
 #$ -q epyc,bio
 #$ -pe openmp 8
 #$ -R y
-#$ -t 1-24
+#$ -t 1-12
 
 prefix=`head -n $SGE_TASK_ID fastq.prefixes.txt | tail -n 1`
 
@@ -45,7 +45,7 @@ cd ..
 #$ -q epyc,bio
 #$ -pe openmp 8
 #$ -R y
-#$ -t 1-24
+#$ -t 1-12
 
 module load trimmomatic
 module load BBMap
@@ -63,7 +63,7 @@ java -jar /data/apps/trimmomatic/0.35/trimmomatic-0.35.jar PE -threads 8 -phred3
 #$ -q epyc,bio
 #$ -pe openmp 8
 #$ -R y
-#$ -t 1-24
+#$ -t 1-12
 
 module load fastqc
 
@@ -89,7 +89,7 @@ STAR --runMode genomeGenerate --genomeDir ../star_genome/indices/genome --genome
 #$ -q epyc,bio
 #$ -pe openmp 8
 #$ -R y
-#$ -t 1-24
+#$ -t 1-12
 
 module load STAR/2.5.2a
 
@@ -106,7 +106,7 @@ STAR --genomeDir ../star_genome --readFilesIn ../fastq_files/${prefix}-sortmerna
 #$ -q epyc,bio
 #$ -pe openmp 8
 #$ -R y
-#$ -t 1-24
+#$ -t 1-12
 
 module load fastqc
 
@@ -131,17 +131,21 @@ hisat2_extract_exons.py -v ./referenceData/annotations/Mus_musculus.GRCm38.80.gt
 hisat2-build ./referenceData/fasta/Mus_musculus.GRCm38.dna_sm.primary_assembly.fa --ss ./referenceData/hisat2_index/splice_sites.txt --exon ./referenceData/hisat2_index/exons.txt ./referenceData/hisat2_index/GRCm38.hisat2
 </code></pre>
 
-### STEP 2b : STAR Alignment (Alignment)
+### STEP 2b : HISAT2 Alignment (Alignment)
 <pre><code>#!/bin/bash
-#$ -N star_jobs
+#$ -N hisat_jobs
 #$ -q epyc,bio
 #$ -pe openmp 8
 #$ -R y
-#$ -t 1-24
+#$ -t 1-12
 
-module load STAR/2.5.2a
+module load hisat2/2.1.0
+module load python/2.7.15
+module load samtools/1.9
 
 prefix=`head -n $SGE_TASK_ID fastq.prefixes.txt | tail -n 1`
 
-STAR --genomeDir ../star_genome --readFilesIn ../fastq_files/${prefix}-sortmerna-trimmomatic_1.fq ../fastq_files/${prefix}-sortmerna-trimmomatic_2.fq --runThreadN 24 --outFileNamePrefix ${prefix}-STAR  --outSAMtype BAM Unsorted SortedByCoordinate
-</code></pre>
+hisat2 -x ${hisat2Ref} -U ${prefix}_R1.fastq -U ${prefix}_R2.fastq | samtools view -bh - | samtools sort - > ${prefix}.bam
+
+samtools index ${prefix}.bam
+</code></pre
