@@ -98,6 +98,14 @@ prefix=`head -n $SGE_TASK_ID fastq.prefixes.txt | tail -n 1`
 STAR --genomeDir ../star_genome --readFilesIn ../fastq_files/${prefix}-sortmerna-trimmomatic_1.fq ../fastq_files/${prefix}-sortmerna-trimmomatic_2.fq --runThreadN 24 --outFileNamePrefix ${prefix}-STAR  --outSAMtype BAM Unsorted SortedByCoordinate
 </code></pre>
 
+### STEP 6 : Feacture Count generation
+> The R script for the feture count matrix is as follows:
+<pre><code>library(Rsubread)
+bamLocal <- getwd()
+bamFiles <- list.files(bamLocal,pattern="*Aligned.sortedByCoord.out.bam")
+fc <- featureCounts(bamFiles, nthreads = 8, annot.inbuilt = "mm10", isPairedEnd = T, strandSpecific = 0)
+</code><pre>
+
 ## Using HISAT2
 
 ### STEP 1: FASTQC (Raw FASTQ)
@@ -149,3 +157,11 @@ hisat2 -x ${hisat2Ref} -U ${prefix}_R1.fastq -U ${prefix}_R2.fastq | samtools vi
 
 samtools index ${prefix}.bam
 </code></pre
+
+### STEP 3 : Feacture Count generation
+> The R script for the feture count matrix is as follows:
+<pre><code>library(Rsubread)
+bamLocal <- getwd()
+bamFiles <- list.files(bamLocal,pattern="*.bam$")
+fc <- featureCounts(bamFiles, nthreads = 8, annot.inbuilt = "mm10", isPairedEnd = T, strandSpecific = 0)
+</code><pre>
