@@ -156,7 +156,7 @@ prefix=`head -n $SGE_TASK_ID fastq.prefixes.txt | tail -n 1`
 hisat2 -x ${hisat2Ref} -U ${prefix}_R1.fastq -U ${prefix}_R2.fastq | samtools view -bh - | samtools sort - > ${prefix}.bam
 
 samtools index ${prefix}.bam
-</code></pre
+</code></pre>
 
 ### STEP 3 : Feacture Count generation
 > The R script for the feture count matrix is as follows:
@@ -164,7 +164,7 @@ samtools index ${prefix}.bam
 bamLocal <- getwd()
 bamFiles <- list.files(bamLocal,pattern="*.bam$")
 fc <- featureCounts(bamFiles, nthreads = 8, annot.inbuilt = "mm10", isPairedEnd = T, strandSpecific = 0)
-</code><pre>
+</code></pre>
 
 ## R SCRIPT for both Pipelines
 <pre><code>---
