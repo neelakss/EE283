@@ -104,7 +104,7 @@ STAR --genomeDir ../star_genome --readFilesIn ../fastq_files/${prefix}-sortmerna
 bamLocal <- getwd()
 bamFiles <- list.files(bamLocal,pattern="*Aligned.sortedByCoord.out.bam")
 fc <- featureCounts(bamFiles, nthreads = 8, annot.inbuilt = "mm10", isPairedEnd = T, strandSpecific = 0)
-</code><pre>
+</code></pre>
 
 ## Using HISAT2
 
