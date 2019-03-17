@@ -167,16 +167,7 @@ fc <- featureCounts(bamFiles, nthreads = 8, annot.inbuilt = "mm10", isPairedEnd 
 </code></pre>
 
 ## R SCRIPT for both Pipelines
-<pre><code>---
-title: "FinaL Project DESeq2"
-author: "Neelakshi Soni"
-date: "16 March 2019"
-output: html_document
-editor_options: 
-  chunk_output_type: console
----
-
-```{r setup, include=FALSE}
+<pre><code>```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library("DESeq2")
 library("vsn")
@@ -184,6 +175,7 @@ library("pheatmap")
 library("ggplot2")
 library("RColorBrewer")
 ```
+
 
 # Loading data
 
@@ -244,6 +236,7 @@ par(mfrow=c(1,2))
 plotMA(res1, main = "STAR Alignment", )
 plotMA(res2, main = "HISAT Alignment")
 
+![MA Plot (STAR vs HISAT)](plotMA.png)
 
 ntd1 <- normTransform(dds1)
 ntd2 <- normTransform(dds2)
