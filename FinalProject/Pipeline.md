@@ -314,9 +314,11 @@ pheatmap(sampleDistMatrix1,
          col=colors, main = "STAR Alignment")
 plotPCA(vsd1, intgroup=c("Strain", "Treatment")) + ggtitle("STAR Alignment")
 pcaData1 <- plotPCA(vsd1, intgroup=c("Strain", "Treatment"), returnData=TRUE)
+</code></pre>
 
+<img src="star_ss.png" width="425"/> <img src="star_pca.png" width="425"/> 
 
-sampleDists2 <- dist(t(assay(vsd2)))
+<pre><code>sampleDists2 <- dist(t(assay(vsd2)))
 sampleDistMatrix2 <- as.matrix(sampleDists2)
 rownames(sampleDistMatrix2) <- paste(vsd2$Strain, vsd2$Treatment, sep="-")
 colnames(sampleDistMatrix2) <- NULL
@@ -327,3 +329,5 @@ pheatmap(sampleDistMatrix2,
          col=colors, main = "HISAT Alignment")
 plotPCA(vsd2, intgroup=c("Strain", "Treatment")) + ggtitle("HISAT Alignment")
 </code></pre>
+
+<img src="hisat_ss.png" width="425"/> <img src="hisat_pca.png" width="425"/> 
