@@ -165,3 +165,156 @@ bamLocal <- getwd()
 bamFiles <- list.files(bamLocal,pattern="*.bam$")
 fc <- featureCounts(bamFiles, nthreads = 8, annot.inbuilt = "mm10", isPairedEnd = T, strandSpecific = 0)
 </code><pre>
+
+## R SCRIPT for both Pipelines
+<pre><code>---
+title: "FinaL Project DESeq2"
+author: "Neelakshi Soni"
+date: "16 March 2019"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library("DESeq2")
+library("vsn")
+library("pheatmap")
+library("ggplot2")
+library("RColorBrewer")
+```
+
+# Loading data
+
+```{r load_data}
+load("fc_JoshR6_hisat.RData") #fc1
+load("fc_JoshR6_star.RData")  #fc
+targets <- read.csv("Targets.csv")
+colnames(fc$counts) <- targets$Name
+colnames(fc1$counts) <- targets$Name
+group <- factor(targets$Group, levels = c("Con_Plx","Con_Veh","R6_Plx","R6_Veh"))
+```
+
+## Matrix formation
+
+```{r deseq2}
+dds1 <- DESeqDataSetFromMatrix(countData = fc$counts,
+                              colData = targets,
+                              design= ~ 0+Group)
+keep <- rowSums(counts(dds1)) >= 10
+dds1 <- dds1[keep,]
+
+dds2 <- DESeqDataSetFromMatrix(countData = fc1$counts,
+                              colData = targets,
+                              design= ~ 0+Group)
+keep <- rowSums(counts(dds2)) >= 10
+dds2<- dds2[keep,]
+```
+
+# DEGenes found
+
+```{r differential_expression}
+dds1 <- DESeq(dds1)
+res1 <- results(dds1 , contrast = c("Group","R6_Veh", "Con_Veh"))
+res1
+
+dds2 <- DESeq(dds2)
+res2 <- results(dds2 , contrast = c("Group","R6_Veh", "Con_Veh"))
+res2
+```
+
+```{r reorder}
+resOrdered1 <- res1[order(res1$pvalue),]
+summary(res1)
+sum(res1$padj < 0.1, na.rm=TRUE)
+res1_05 <- results(dds1, alpha=0.05)
+sum(res1_05$padj < 0.05, na.rm=TRUE)
+
+
+resOrdered2 <- res2[order(res2$pvalue),]
+summary(res2)
+sum(res2$padj < 0.1, na.rm=TRUE)
+res2_05 <- results(dds2, alpha=0.05)
+sum(res2_05$padj < 0.05, na.rm=TRUE)
+```
+
+```{r plot}
+par(mfrow=c(1,2))
+plotMA(res1, main = "STAR Alignment", )
+plotMA(res2, main = "HISAT Alignment")
+
+
+ntd1 <- normTransform(dds1)
+ntd2 <- normTransform(dds2)
+vsd1 <- vst(dds1, blind=FALSE)
+rld1 <- rlog(dds1, blind=FALSE)
+head(assay(vsd1), 3)
+vsd2 <- vst(dds2, blind=FALSE)
+rld2 <- rlog(dds2, blind=FALSE)
+head(assay(vsd2), 3)
+
+msd1 <- meanSdPlot(assay(ntd1))
+msd1$gg + ggtitle("STAR Alignment (normal transformation)") + scale_fill_gradient(low = "purple", high = "orange") 
+msd2 <- meanSdPlot(assay(ntd2))
+msd2$gg + ggtitle("HISAT Alignment (normal transformation)") + scale_fill_gradient(low = "purple", high = "orange") 
+
+
+msd1 <- meanSdPlot(assay(vsd1))
+msd1$gg + ggtitle("STAR Alignment (variance stabalize)") + scale_fill_gradient(low = "purple", high = "orange") 
+msd2 <- meanSdPlot(assay(vsd2))
+msd2$gg + ggtitle("HISAT Alignment (variance stabalize)") + scale_fill_gradient(low = "purple", high = "orange") 
+
+msd1 <- meanSdPlot(assay(rld1))
+msd1$gg + ggtitle("STAR Alignment (regularized log)") + scale_fill_gradient(low = "purple", high = "orange")
+msd2 <- meanSdPlot(assay(rld2))
+msd2$gg + ggtitle("HISAT Alignment (regularized log)") + scale_fill_gradient(low = "purple", high = "orange")
+```
+
+```{r data_quality_assessment}
+select1 <- order(rowMeans(counts(dds1,normalized=TRUE)),
+                decreasing=TRUE)[1:20]
+df1 <- as.data.frame(colData(dds1)[,c("Strain","Treatment")])
+pheatmap(assay(ntd1)[select1,], cluster_rows=FALSE, show_rownames=FALSE,
+         cluster_cols=FALSE, annotation_col=df1, main = "STAR Alignment (norm trans)")
+pheatmap(assay(vsd1)[select1,], cluster_rows=FALSE, show_rownames=FALSE,
+         cluster_cols=FALSE, annotation_col=df1, main = "STAR Alignment (var stab)" )
+pheatmap(assay(rld1)[select1,], cluster_rows=FALSE, show_rownames=FALSE,
+         cluster_cols=FALSE, annotation_col=df1, main = "STAR Alignment (reg log)")
+
+select2 <- order(rowMeans(counts(dds2,normalized=TRUE)),
+                decreasing=TRUE)[1:20]
+df2 <- as.data.frame(colData(dds2)[,c("Strain","Treatment")])
+pheatmap(assay(ntd2)[select2,], cluster_rows=FALSE, show_rownames=FALSE,
+         cluster_cols=FALSE, annotation_col=df2, main = "HISAT Alignment (norm trans)")
+pheatmap(assay(vsd2)[select2,], cluster_rows=FALSE, show_rownames=FALSE,
+         cluster_cols=FALSE, annotation_col=df2, main = "HISAT Alignment (var stab)" )
+pheatmap(assay(rld2)[select2,], cluster_rows=FALSE, show_rownames=FALSE,
+         cluster_cols=FALSE, annotation_col=df2, main = "HISAT Alignment (reg log)")
+```
+
+```{r sample-t-sample_distances}
+sampleDists1 <- dist(t(assay(vsd1)))
+sampleDistMatrix1 <- as.matrix(sampleDists1)
+rownames(sampleDistMatrix1) <- paste(vsd1$Strain, vsd1$Treatment, sep="-")
+colnames(sampleDistMatrix1) <- NULL
+colors <- colorRampPalette( rev(brewer.pal(9, "Blues")) )(255)
+pheatmap(sampleDistMatrix1,
+         clustering_distance_rows=sampleDists1,
+         clustering_distance_cols=sampleDists1,
+         col=colors, main = "STAR Alignment")
+plotPCA(vsd1, intgroup=c("Strain", "Treatment")) + ggtitle("STAR Alignment")
+pcaData1 <- plotPCA(vsd1, intgroup=c("Strain", "Treatment"), returnData=TRUE)
+
+
+sampleDists2 <- dist(t(assay(vsd2)))
+sampleDistMatrix2 <- as.matrix(sampleDists2)
+rownames(sampleDistMatrix2) <- paste(vsd2$Strain, vsd2$Treatment, sep="-")
+colnames(sampleDistMatrix2) <- NULL
+colors <- colorRampPalette( rev(brewer.pal(9, "Blues")) )(255)
+pheatmap(sampleDistMatrix2,
+         clustering_distance_rows=sampleDists2,
+         clustering_distance_cols=sampleDists2,
+         col=colors, main = "HISAT Alignment")
+plotPCA(vsd2, intgroup=c("Strain", "Treatment")) + ggtitle("HISAT Alignment")
+</code></pre>
