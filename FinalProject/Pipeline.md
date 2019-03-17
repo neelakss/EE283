@@ -235,9 +235,11 @@ sum(res2_05$padj < 0.05, na.rm=TRUE)
 par(mfrow=c(1,2))
 plotMA(res1, main = "STAR Alignment", )
 plotMA(res2, main = "HISAT Alignment")
+</code></pre>
 
-![MA Plot (STAR vs HISAT)](plotMA.png)
+![MA Plot (STAR vs HISAT)](plotma.png)
 
+<pre><code>
 ntd1 <- normTransform(dds1)
 ntd2 <- normTransform(dds2)
 vsd1 <- vst(dds1, blind=FALSE)
