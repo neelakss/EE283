@@ -261,14 +261,20 @@ msd2$gg + ggtitle("HISAT Alignment (normal transformation)") + scale_fill_gradie
 msd1$gg + ggtitle("STAR Alignment (variance stabalize)") + scale_fill_gradient(low = "purple", high = "orange") 
 msd2 <- meanSdPlot(assay(vsd2))
 msd2$gg + ggtitle("HISAT Alignment (variance stabalize)") + scale_fill_gradient(low = "purple", high = "orange") 
+</code></pre>
 
-msd1 <- meanSdPlot(assay(rld1))
+<img src="msd_star_vs.png" width="425"/> <img src="msd_hisat_vs.png" width="425"/> 
+
+<pre><code>msd1 <- meanSdPlot(assay(rld1))
 msd1$gg + ggtitle("STAR Alignment (regularized log)") + scale_fill_gradient(low = "purple", high = "orange")
 msd2 <- meanSdPlot(assay(rld2))
 msd2$gg + ggtitle("HISAT Alignment (regularized log)") + scale_fill_gradient(low = "purple", high = "orange")
 ```
+</code></pre>
 
-```{r data_quality_assessment}
+<img src="msd_star_rl.png" width="425"/> <img src="msd_hisat_rl.png" width="425"/> 
+
+<pre><code>```{r data_quality_assessment}
 select1 <- order(rowMeans(counts(dds1,normalized=TRUE)),
                 decreasing=TRUE)[1:20]
 df1 <- as.data.frame(colData(dds1)[,c("Strain","Treatment")])
