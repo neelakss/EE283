@@ -256,6 +256,7 @@ msd2$gg + ggtitle("HISAT Alignment (normal transformation)") + scale_fill_gradie
 </code></pre>
 
 ![MSD](msd_star_nt.png) ![MSD](msd_hisat_nt.png)
+<img src="msd_star_nt.png" width="425"/> <img src="msd_hisat_nt.png" width="425"/> 
 
 <pre><code>msd1 <- meanSdPlot(assay(vsd1))
 msd1$gg + ggtitle("STAR Alignment (variance stabalize)") + scale_fill_gradient(low = "purple", high = "orange") 
