@@ -284,8 +284,11 @@ pheatmap(assay(vsd1)[select1,], cluster_rows=FALSE, show_rownames=FALSE,
          cluster_cols=FALSE, annotation_col=df1, main = "STAR Alignment (var stab)" )
 pheatmap(assay(rld1)[select1,], cluster_rows=FALSE, show_rownames=FALSE,
          cluster_cols=FALSE, annotation_col=df1, main = "STAR Alignment (reg log)")
+</code></pre>
 
-select2 <- order(rowMeans(counts(dds2,normalized=TRUE)),
+<img src="star_nt_heat.png" width="282"/> <img src="star_nt_heat.png" width="282"/>  <img src="star_nt_heat.png" width="282"/>
+
+<pre><code>select2 <- order(rowMeans(counts(dds2,normalized=TRUE)),
                 decreasing=TRUE)[1:20]
 df2 <- as.data.frame(colData(dds2)[,c("Strain","Treatment")])
 pheatmap(assay(ntd2)[select2,], cluster_rows=FALSE, show_rownames=FALSE,
@@ -295,8 +298,11 @@ pheatmap(assay(vsd2)[select2,], cluster_rows=FALSE, show_rownames=FALSE,
 pheatmap(assay(rld2)[select2,], cluster_rows=FALSE, show_rownames=FALSE,
          cluster_cols=FALSE, annotation_col=df2, main = "HISAT Alignment (reg log)")
 ```
+</code></pre>
 
-```{r sample-t-sample_distances}
+<img src="hisat_nt_heat.png" width="282"/> <img src="hisat_nt_heat.png" width="282"/>  <img src="hisat_nt_heat.png" width="282"/>
+
+<pre><code>```{r sample-t-sample_distances}
 sampleDists1 <- dist(t(assay(vsd1)))
 sampleDistMatrix1 <- as.matrix(sampleDists1)
 rownames(sampleDistMatrix1) <- paste(vsd1$Strain, vsd1$Treatment, sep="-")
