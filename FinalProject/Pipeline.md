@@ -331,3 +331,7 @@ plotPCA(vsd2, intgroup=c("Strain", "Treatment")) + ggtitle("HISAT Alignment")
 </code></pre>
 
 <img src="hisat_ss.png" width="425"/> <img src="hisat_pca.png" width="425"/> 
+
+## Explaination
+
+Seeing as I trimmed more in the STAR pipeline, the difference in gene number could attest to that. This would also cause a small difference in the variance seen in the PCA plot. However, the genes didn't change significantly, so I assume both STAR and HISAT had a similar algorithm for alignment.
