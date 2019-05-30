@@ -1,6 +1,22 @@
 # Pipeline for RNA-seq Analysis
 
 ## Using STAR
+### STEP 0: Merge FASTQ
+<pre><code>
+#!/bin/bash
+#$ -N merged_fastq
+#$ -q epyc,bio
+#$ -pe openmp 8
+#$ -R y
+#$ -t 1-20
+
+
+prefix=`head -n $SGE_TASK_ID fastq.prefixes.txt | tail -n 1`
+
+cat ${prefix}_L001_R1_001.fastq ${prefix}_L002_R1_001.fastq ${prefix}_L003_R1_001.fastq ${prefix}_L004_R1_001.fastq > ${prefix}_R1.fastq
+
+cat ${prefix}_L001_R2_001.fastq ${prefix}_L002_R2_001.fastq ${prefix}_L003_R2_001.fastq ${prefix}_L004_R2_001.fastq > ${prefix}_R2.fastq
+</code></pre>
 
 ### STEP 1: FASTQC (Raw FASTQ)
 <pre><code>#!/bin/bash
